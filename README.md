@@ -1,8 +1,19 @@
-# Install a 4-node Minio cluster on Ubuntu 18.04.4 LTS
+# Install a 4-node minio cluster on Ubuntu 18.04.4 LTS
 This logbook was started 2020-04-23.
 
 ## Prerequisites
-TBD
+
+### Create user
+Create a system user account to run minio as a systemd daemon
+
+    sudo groupadd --system minio
+    sudo useradd -s /sbin/nologin --system -g minio minio
+
+### Create mounts / directories where minio stores data
+In order to run Minio in fault tolerant mode (erasure code) a disk set of 4 is equired. If you plan on running a single node, these 4 disks should be mounted from 4 different disks. In this example, I'll be running one disk on 4 nodes each to achieve fault tolerance.
+
+    sudo mkdir /data
+    sudo chown -R minio:minio /data
 
 ## Download and install software
 Download the software for 64bit Ubuntu
@@ -16,29 +27,19 @@ The entire server software is one file. Make it executable
 Move it to a location where it can be run by a local system user that doesn't have a `/home` directory
 
     sudo mv minio /usr/local/bin
-
-## Create user
-Create a system user account to run MinIO as a systemd daemon
-
-    sudo groupadd --system minio
-    sudo useradd -s /sbin/nologin --system -g minio minio
-
-## Create mounts / directories where MinIO stores data
-
-TBD
-
+    
 ## Create an environment file for the `minio.service` file
 
 TBD
 
-## Create systemd service unit for MinIO
+## Create systemd service unit for minio
 
     sudo nano /etc/systemd/system/minio.service
 
 Paste the following contents into `minio.service`
 
     [Unit]
-    Description=Minio
+    Description=minio
     Documentation=https://docs.minio.io
     Wants=network-online.target
     After=network-online.target
@@ -50,9 +51,9 @@ Paste the following contents into `minio.service`
     Group=minio
 
     EnvironmentFile=-/etc/default/minio
-    ExecStartPre=/bin/bash -c "if [ -z \"${MINIO_VOLUMES}\" ]; then echo \"Variable MINIO_VOLUMES not set in /etc/default/minio\"; exit 1; fi"
+    ExecStartPre=/bin/bash -c "if [ -z \"${minio_VOLUMES}\" ]; then echo \"Variable minio_VOLUMES not set in /etc/default/minio\"; exit 1; fi"
 
-    ExecStart=/usr/local/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
+    ExecStart=/usr/local/bin/minio server $minio_OPTS $minio_VOLUMES
 
     # Let systemd restart this service always
     Restart=always
