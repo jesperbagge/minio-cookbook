@@ -27,22 +27,7 @@ The entire server software is one file. Make it executable
 Move it to a location where it can be run by a local system user that doesn't have a `/home` directory
 
     sudo mv minio /usr/local/bin
-<<<<<<< HEAD
-    
-=======
 
-## Create user
-Create a system user account to run MinIO as a systemd daemon
-
-    sudo groupadd --system minio
-    sudo useradd -s /sbin/nologin --system -g minio minio
-
-## Create mounts / directories where MinIO stores data
-
-    sudo mkdir /data
-    sudo chown -R minio:minio /data
-
->>>>>>> 9988f3c99d23446ad0f21da443cabdcf8abf9333
 ## Create an environment file for the `minio.service` file
 
 TBD
