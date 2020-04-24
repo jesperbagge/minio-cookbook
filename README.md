@@ -25,7 +25,8 @@ Create a system user account to run MinIO as a systemd daemon
 
 ## Create mounts / directories where MinIO stores data
 
-TBD
+    sudo mkdir /data
+    sudo chown -R minio:minio /data
 
 ## Create an environment file for the `minio.service` file
 
