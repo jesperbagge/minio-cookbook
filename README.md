@@ -81,3 +81,17 @@ Paste the following contents into `minio.service`
 
     [Install]
     WantedBy=multi-user.target
+
+## Install the daemon and start 
+Install the daemon
+
+    sudo systemctl daemon-reload
+
+Enable Minio start at boot
+
+    sudo systemctl enable minio
+
+Start Minio now
+
+    sudo systemctl start minio
+
