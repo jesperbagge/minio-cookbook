@@ -10,10 +10,10 @@ Create a system user account to run minio as a systemd daemon
     sudo useradd -s /sbin/nologin --system -g minio minio
 
 ### Create mounts / directories where minio stores data
-In order to run Minio in fault tolerant mode (erasure code) a disk set of 4 is equired. If you plan on running a single node, these 4 disks should be mounted from 4 different disks. In this example, I'll be running one disk on 4 nodes each to achieve fault tolerance.
+In order to run Minio in fault tolerant mode (erasure code) a disk set of 4 is equired. If you plan on running a single node, these should be mounted from 4 different disks on the same node. In this example, I'll be running one disk on 4 nodes each to achieve fault tolerance.
 
-    sudo mkdir /data
-    sudo chown -R minio:minio /data
+    sudo mkdir -p /data/minio
+    sudo chown -R minio:minio /data/minio
 
 ## Download and install software
 Download the software for 64bit Ubuntu
@@ -29,8 +29,22 @@ Move it to a location where it can be run by a local system user that doesn't ha
     sudo mv minio /usr/local/bin
 
 ## Create an environment file for the `minio.service` file
+A file containing environent variable for minio should be placed at `/etc/default/minio`
 
-TBD
+    sudo mkdir /etd/default
+    sudo nano /etc/default/minio
+
+Paste the following contents into `/etc/default/minio`
+
+    # Volume to be used for Minio server.
+    MINIO_VOLUMES="/data/minio"
+    # Use if you want to run Minio on a custom port.
+    MINIO_OPTS="--address :9000"
+    # Access Key of the server.
+    MINIO_ACCESS_KEY=your-access-key-here
+    # Secret key of the server.
+    MINIO_SECRET_KEY=enter-your-secret-key-here
+
 
 ## Create systemd service unit for minio
 
@@ -46,7 +60,7 @@ Paste the following contents into `minio.service`
     AssertFileIsExecutable=/usr/local/bin/minio
 
     [Service]
-    WorkingDirectory=/data
+    WorkingDirectory=/data/minio
     User=minio
     Group=minio
 
