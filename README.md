@@ -1,5 +1,6 @@
 # Install a 4-node minio cluster on Ubuntu 18.04.4 LTS
-This logbook was started 2020-04-23.
+The following steps needs to be performed on every node that should constitute the cluster.
+Every node should have the same MINIO_ACCESS_KEY and MINIO_SECRET_KEY.
 
 ## Prerequisites
 
@@ -64,10 +65,10 @@ Paste the following contents into `minio.service`
     User=minio
     Group=minio
 
-    EnvironmentFile=-/etc/default/minio
-    ExecStartPre=/bin/bash -c "if [ -z \"${minio_VOLUMES}\" ]; then echo \"Variable minio_VOLUMES not set in /etc/default/minio\"; exit 1; fi"
+    EnvironmentFile=/etc/default/minio
+    ExecStartPre=/bin/bash -c "if [ -z \"${MINIO_VOLUMES}\" ]; then echo \"Variable MINIO_VOLUMES not set in /etc/default/minio\"; exit 1; fi"
 
-    ExecStart=/usr/local/bin/minio server $minio_OPTS $minio_VOLUMES
+    ExecStart=/usr/local/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
 
     # Let systemd restart this service always
     Restart=always
