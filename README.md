@@ -46,6 +46,18 @@ Paste the following contents into `/etc/default/minio`
     # Secret key of the server.
     MINIO_SECRET_KEY=enter-your-secret-key-here
 
+Auto-encryption can be turned on with the enviroment variable `MINIO_KMS_AUTO_ENCRYPTION`. This will require a proper KMS setup. The definition of the word 'proper' can be debated and Minios own documentation has conflicting standpoints. One tutorial uses Hashicorp Vault as a KMS store, but another part of the documentation lets you know that using Hashicorp Vault is a deprecated solution. 
+If you want to turn on auto-encrypt with server-side encryption using a single master key, begin with generating a random master key with the following command:
+
+    head -c 32 /dev/urandom | xxd -c 32 -ps
+
+The output of this command gives you a 256 bit key encoded as HEX. Use this with a master-key ID that you set yourself. Add the following two lines to `/etc/default/minio`
+
+    MINIO_KMS_AUTO_ENCRYPTION=on
+    MINIO_KMS_MASTER_KEY=your-key-id:a4080d8433737649d2e39f390aba7a7ef4e00256a73d52510ae5fb688a461c1d
+
+Replace that long number with the output of your `head` command.
+
 
 ## Create systemd service unit for minio
 
