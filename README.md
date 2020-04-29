@@ -57,6 +57,7 @@ The output of this command gives you a 256 bit key encoded as HEX. Use this with
     MINIO_KMS_MASTER_KEY=your-key-id:a4080d8433737649d2e39f390aba7a7ef4e00256a73d52510ae5fb688a461c1d
 
 Replace that long number with the output of your `head` command.
+**Note! Don't generate different master keys on each node!** 
 
 
 ## Create systemd service unit for minio
@@ -78,7 +79,6 @@ Paste the following contents into `minio.service`
     Group=minio
 
     EnvironmentFile=/etc/default/minio
-    ExecStartPre=/bin/bash -c "if [ -z \"${MINIO_VOLUMES}\" ]; then echo \"Variable MINIO_VOLUMES not set in /etc/default/minio\"; exit 1; fi"
 
     ExecStart=/usr/local/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
 
