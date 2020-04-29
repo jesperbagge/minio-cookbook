@@ -1,8 +1,16 @@
 # Install a 4-node minio cluster on Ubuntu 18.04.4 LTS
 The following steps needs to be performed on every node that should constitute the cluster.
-Every node should have the same MINIO_ACCESS_KEY and MINIO_SECRET_KEY.
+Every node should have the same configuration file, ensuring that all nodes have the same access keys.
 
 ## Prerequisites
+The preferred way (or atleast most convenient) to go about setting up a distributed Minio cluster is to name your nodes in a range-like manner, i.e. node1, node2, node3, node4, etc...
+You will see why this is convenient later when we create our configuration file.
+
+In this cookbook I have named my 4 nodes:
+ * minio1
+ * minio2
+ * minio3
+ * minio4
 
 ### Create user
 Create a system user account to run minio as a systemd daemon
@@ -35,12 +43,12 @@ A file containing environent variable for minio should be placed at `/etc/defaul
     sudo mkdir /etd/default
     sudo nano /etc/default/minio
 
-Paste the following contents into `/etc/default/minio`
+Paste the following contents into `/etc/default/minio`. Replace hostname with the name of your node(s). Remember the tip about naming your nodes in range?
 
     # Volume to be used for Minio server.
     MINIO_VOLUMES="/data/minio"
     # Use if you want to run Minio on a custom port.
-    MINIO_OPTS="--address :9000"
+    MINIO_OPTS="http://minio{1...4}"
     # Access Key of the server.
     MINIO_ACCESS_KEY=your-access-key-here
     # Secret key of the server.
@@ -51,8 +59,9 @@ If you want to turn on auto-encrypt with server-side encryption using a single m
 
     head -c 32 /dev/urandom | xxd -c 32 -ps
 
-The output of this command gives you a 256 bit key encoded as HEX. Use this with a master-key ID that you set yourself. Add the following two lines to `/etc/default/minio`
+The output of this command gives you a 256 bit key encoded as HEX. Use this with a master-key ID that you set yourself. Add the following lines to `/etc/default/minio`
 
+    # Server-side encryption with single master key. Don't lose this! 
     MINIO_KMS_AUTO_ENCRYPTION=on
     MINIO_KMS_MASTER_KEY=your-key-id:a4080d8433737649d2e39f390aba7a7ef4e00256a73d52510ae5fb688a461c1d
 
@@ -81,7 +90,7 @@ Paste the following contents into `minio.service`
 
     EnvironmentFile=/etc/default/minio
 
-    ExecStart=/usr/local/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
+    ExecStart=/usr/local/bin/minio server $MINIO_OPTS$MINIO_VOLUMES
 
     # Let systemd restart this service always
     Restart=always
