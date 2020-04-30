@@ -54,6 +54,7 @@ Paste the following contents into `/etc/default/minio`. Replace hostname with th
     # Secret key of the server.
     MINIO_SECRET_KEY=enter-your-secret-key-here
 
+### Encryption
 Auto-encryption can be turned on with the enviroment variable `MINIO_KMS_AUTO_ENCRYPTION`. For a production-grade set-up this would require a proper KMS system, like Hashicorp Vault. 
 For lesser management overhead, Minio can be configured to use server-side encryption using a single master key. To set this up, begin with generating a random master key with the following command:
 
