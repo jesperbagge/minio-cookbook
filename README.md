@@ -46,8 +46,8 @@ A file containing environent variable for minio should be placed at `/etc/defaul
 Paste the following contents into `/etc/default/minio`. Replace hostname with the name of your node(s). Remember the tip about naming your nodes in range?
 
     # Volume to be used for Minio server.
-    MINIO_VOLUMES="/data/minio"
-    # Use if you want to run Minio on a custom port.
+    MINIO_VOLUME="/data/minio"
+    # Set range of nodenames.
     MINIO_OPTS="http://minio{1...4}"
     # Access Key of the server.
     MINIO_ACCESS_KEY=your-access-key-here
@@ -91,7 +91,7 @@ Paste the following contents into `minio.service`
 
     EnvironmentFile=/etc/default/minio
 
-    ExecStart=/usr/local/bin/minio server $MINIO_OPTS$MINIO_VOLUMES
+    ExecStart=/usr/local/bin/minio server $MINIO_OPTS$MINIO_VOLUME
 
     # Let systemd restart this service always
     Restart=always
