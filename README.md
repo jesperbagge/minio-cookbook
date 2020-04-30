@@ -38,7 +38,7 @@ Move it to a location where it can be run by a local system user that doesn't ha
     sudo mv minio /usr/local/bin
 
 ## Create an environment file for the `minio.service` file
-A file containing environent variable for minio should be placed at `/etc/default/minio`
+A file containing environent variables for minio should be placed at `/etc/default/minio`
 
     sudo mkdir /etd/default
     sudo nano /etc/default/minio
@@ -68,7 +68,7 @@ The output of this command gives you a 256 bit key encoded as HEX. Use this with
 
 Replace that long number with the output of your `head` command.
 
-**Note! Don't generate different KMS master keys on each node! Remember that all objects will be encrypted at rest on the cluster - even if auto-encryption is turned off at a later time.** 
+**Note! Don't generate different KMS master keys on each node! Remember that all objects will remain encrypted at-rest on the cluster - even if auto-encryption is turned off at a later time.** 
 
 
 ## Create systemd service unit for minio
