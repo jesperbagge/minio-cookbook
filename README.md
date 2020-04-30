@@ -1,8 +1,4 @@
 # Install a 4-node minio cluster on Ubuntu 18.04.4 LTS
-The following steps needs to be performed on every node that should constitute the cluster.
-Every node should have the same configuration file, ensuring that all nodes have the same access keys.
-
-## Prerequisites
 The preferred way (or atleast most convenient) to go about setting up a distributed Minio cluster is to name your nodes in a range-like manner, i.e. node1, node2, node3, node4, etc...
 You will see why this is convenient later when we create our configuration file.
 
@@ -11,6 +7,10 @@ In this cookbook I have named my 4 nodes:
  * minio2
  * minio3
  * minio4
+
+## Prerequisites
+The following steps needs to be performed on every node that should constitute the cluster.
+Every node should have the same configuration file, ensuring that all nodes have the same access keys.
 
 ### Create user
 Create a system user account to run minio as a systemd daemon
